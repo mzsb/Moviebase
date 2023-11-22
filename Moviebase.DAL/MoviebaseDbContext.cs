@@ -1,4 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#region Usings
+
+using Microsoft.EntityFrameworkCore;
+
+#endregion
+
 namespace Moviebase.DAL;
 
 public class MoviebaseDbContext(DbContextOptions<MoviebaseDbContext> options) : DbContext(options)

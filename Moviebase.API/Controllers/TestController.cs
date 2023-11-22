@@ -6,14 +6,10 @@ namespace Moviebase.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TestController : ControllerBase
+public class TestController(MoviebaseDbContext context) : ControllerBase
 {
-    private readonly MoviebaseDbContext _context;
-
-    public TestController(MoviebaseDbContext context) => _context = context; 
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TestItem>>> GetTestItemsAsync() =>
-        await _context.TestItems.ToListAsync();
+        await context.TestItems.ToListAsync();
     
 }
