@@ -1,7 +1,7 @@
-.menu-spacer {
-    flex: 1 1 auto;
+#logo {
+    margin-right: 0.5em;
 }
 
-button {
-    margin-right: 0.5em;
+.menu-spacer {
+    flex: 1 1 auto;
 }

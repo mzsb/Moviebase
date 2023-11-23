@@ -1,0 +1,13 @@
+.controls {
+    display: flex;
+    padding: 1em;
+}
+
+.data {
+    padding: 0em 1em;
+    justify-content: center;
+}
+
+button {
+    margin: 0.2em
+}
