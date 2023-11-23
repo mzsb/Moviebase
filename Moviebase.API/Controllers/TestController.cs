@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Moviebase.DAL;
+using Moviebase.BLL.Dtos;
+using Moviebase.BLL.Interfaces;
 
 namespace Moviebase.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class TestController(MoviebaseDbContext context) : ControllerBase
+[Route("api/[controller]")]
+public class TestController(ITestService testService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TestItem>>> GetTestItemsAsync() =>
-        await context.TestItems.ToListAsync();
-    
+    public async Task<ActionResult<IEnumerable<TestItemDto>>> GetTestItemsAsync() =>
+        await testService.GetTestItemsAsync();
 }

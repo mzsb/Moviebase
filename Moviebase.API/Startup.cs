@@ -1,7 +1,6 @@
 ﻿#region Usings
 
 using Moviebase.API.Extensions;
-using Moviebase.DAL;
 
 #endregion
 
@@ -11,9 +10,10 @@ public class Startup(IConfiguration configuration)
 {
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddApplicationServices(configuration);
         services.AddControllers();
-        services.AddSqliteDbContext<MoviebaseDbContext>(configuration.GetDefaultConnectionString());
         services.AddEndpointsApiExplorer();
+        services.AddCors();
         services.AddSwaggerGen();
     }
 
@@ -29,6 +29,11 @@ public class Startup(IConfiguration configuration)
 
         app.UseHttpsRedirection();
         app.UseRouting();
+        app.UseCors(policy => policy
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins("https://localhost:4200"));
         app.UseEndpoints(endpoints => endpoints.MapControllers());
 
         app.Build();
