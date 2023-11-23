@@ -8,6 +8,7 @@ import { HomeComponent } from './_components/home/home.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     HttpClientModule,
     MatTableModule, 
     MatButtonModule, 
-    MatToolbarModule 
+    MatToolbarModule,
+    MatDividerModule,
   ],
   bootstrap: [AppComponent]
 })

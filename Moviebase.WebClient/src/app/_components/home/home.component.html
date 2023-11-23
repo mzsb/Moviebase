@@ -1,35 +1,25 @@
-<div class="container-fluid page">
+<div class="container-fluid transparent">
 
-    <div class="row controls">
-        
-        <div class="col-md-4">
-
-            <button mat-raised-button color="primary" (click)="getTestItems()">Get test items</button>
-            
-            <button mat-raised-button color="accent" (click)="clear()">Clear</button>
-
+    <div class="row welcome title">
+        <div class="col-md-5">
+            Welcome to Moviebase
+            <mat-divider></mat-divider>
         </div>
-        
     </div>
 
-    <div class="row data">
 
-        <div class="col-md-4">
-
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-                <ng-container matColumnDef="testItemId">
-                    <th mat-header-cell *matHeaderCellDef> TestItemId </th>
-                    <td mat-cell *matCellDef="let element"> {{element.testItemId}} </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                
-            </table>
-
+    <div class="row welcome sub-title">
+        <div class="col-md-6">
+            Your go-to destination for all things movies!
         </div>
+    </div>
 
+    <div class="row welcome content">
+        <div class="col-md-8">
+            Immerse yourself in the captivating world of cinema and share your thoughts by writing reviews for your favorite films. Whether you're into timeless classics or the latest blockbusters, Moviebase is your one-stop film database.
+            Discover new releases, browse through a diverse range of genres, and read reviews crafted by fellow movie enthusiasts. Join our vibrant community of film lovers, where your opinions matter. Register now to unlock exclusive content and be part of the cinematic conversation.
+            it back, relax, and explore the vast universe of movies with Moviebase - where every film has a story, and every opinion adds to the narrative. Start your cinematic journey with us today!
+        </div>
     </div>
 
 </div>
