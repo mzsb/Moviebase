@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Moviebase.BLL.Dtos;
 using Moviebase.BLL.Exceptions;
 using Moviebase.BLL.Interfaces;
-using Moviebase.DAL.Migrations;
 using Moviebase.DAL.Model.Identity;
 
 #endregion
@@ -22,9 +21,8 @@ public class AccountService(
         var users = await userManager.Users.ToListAsync();
 
         var user = await userManager.Users
-            .SingleOrDefaultAsync(user => user.UserName == loginDto.Username);
-
-        if (user is null) throw new AccountException("Invalid username");
+            .SingleOrDefaultAsync(user => user.UserName == loginDto.Username) 
+            ?? throw new AccountException("Invalid username");
 
         var result = await signInManager
             .CheckPasswordSignInAsync(user, loginDto.Password, false);
@@ -40,13 +38,13 @@ public class AccountService(
 
     public async Task<UserDto> RegisterAsync(RegisterDto registerDto)
     {
-        var user = new User { UserName = registerDto.Username};
+        var user = new User { UserName = registerDto.Username };
         await userManager.CreateAsync(user, registerDto.Password);
         await userManager.AddToRoleAsync(user, "User");
 
         return await LoginAsync(new LoginDto
-        { 
-            Username = registerDto.Username, 
+        {
+            Username = user.UserName, 
             Password = registerDto.Password
         });
     }

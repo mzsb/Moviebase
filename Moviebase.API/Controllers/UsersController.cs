@@ -10,7 +10,7 @@ using Moviebase.DAL.Model.Identity;
 namespace Moviebase.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/users")]
 public class UsersController(MoviebaseDbContext context)
 {
     [HttpGet]

@@ -11,4 +11,6 @@ public class User : IdentityUser<Guid>
     public DateTime Created { get; set; }
 
     public ICollection<UserRole>? UserRoles { get; set; }
+
+    public ICollection<Review>? Reviews { get; set; }
 }

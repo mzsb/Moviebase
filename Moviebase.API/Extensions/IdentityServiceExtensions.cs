@@ -35,7 +35,7 @@ public static class IdentityServiceExtensions
             .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetTokenKey())),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue("TokenKey"))),
                 ValidateIssuer = false,
                 ValidateAudience = false
             });

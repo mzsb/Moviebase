@@ -10,7 +10,7 @@ using Moviebase.BLL.Interfaces;
 namespace Moviebase.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/account")]
 public class AccountController(IAccountService accountService) : ControllerBase
 {
     [HttpPost("login")]

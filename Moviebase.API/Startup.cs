@@ -1,6 +1,5 @@
 ﻿#region Usings
 
-using Microsoft.Extensions.Configuration;
 using Moviebase.API.Extensions;
 
 #endregion

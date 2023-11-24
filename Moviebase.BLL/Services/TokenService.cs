@@ -18,7 +18,8 @@ public class TokenService(
     IConfiguration configuration, 
     UserManager<User> userManager) : ITokenService
 {
-    private readonly SymmetricSecurityKey _key = new (Encoding.UTF8.GetBytes(configuration.GetTokenKey()));
+    private readonly SymmetricSecurityKey _tokenKey = new (Encoding.UTF8.GetBytes(configuration.GetValue("TokenKey")));
+
     public async Task<string> CreateTokenAsync(User user)
     {
         List<Claim> claims = [
@@ -30,7 +31,7 @@ public class TokenService(
 
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-        var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+        var creds = new SigningCredentials(_tokenKey, SecurityAlgorithms.HmacSha512Signature);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

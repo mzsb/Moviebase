@@ -11,8 +11,8 @@ using Moviebase.DAL;
 namespace Moviebase.DAL.Migrations
 {
     [DbContext(typeof(MoviebaseDbContext))]
-    [Migration("20231123222200_Users")]
-    partial class Users
+    [Migration("20231124160648_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -214,6 +214,68 @@ namespace Moviebase.DAL.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("Moviebase.DAL.Model.Movie", b =>
+                {
+                    b.Property<Guid>("MovieId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Actors")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ImdbRating")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PosterId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Year")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MovieId");
+
+                    b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("Moviebase.DAL.Model.Review", b =>
+                {
+                    b.Property<Guid>("ReviewId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ReviewId");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Moviebase.DAL.Model.Identity.Role", null)
@@ -269,6 +331,25 @@ namespace Moviebase.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Moviebase.DAL.Model.Review", b =>
+                {
+                    b.HasOne("Moviebase.DAL.Model.Movie", "Movie")
+                        .WithMany("Reviews")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Moviebase.DAL.Model.Identity.User", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Moviebase.DAL.Model.Identity.Role", b =>
                 {
                     b.Navigation("UserRoles");
@@ -276,7 +357,14 @@ namespace Moviebase.DAL.Migrations
 
             modelBuilder.Entity("Moviebase.DAL.Model.Identity.User", b =>
                 {
+                    b.Navigation("Reviews");
+
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Moviebase.DAL.Model.Movie", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }
