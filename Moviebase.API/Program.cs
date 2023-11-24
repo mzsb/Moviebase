@@ -1,7 +1,9 @@
 #region Usings
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moviebase.DAL;
+using Moviebase.DAL.Model.Identity;
 
 #endregion
 
@@ -17,8 +19,10 @@ public class Program
         try
         {
             var context = service.GetRequiredService<MoviebaseDbContext>();
+            var userManager = service.GetRequiredService<UserManager<User>>();
+            var roleManager = service.GetRequiredService<RoleManager<Role>>();
             await context.Database.MigrateAsync();
-            await context.SeedTestItemsAsync();
+            await Seed.SeedUsersAsync(userManager, roleManager);
         }
         catch (Exception ex)
         {

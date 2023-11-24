@@ -12,6 +12,6 @@ public class AutoMapperProfiles : Profile
 {
     public AutoMapperProfiles()
     {
-        CreateMap<TestItem, TestItemDto>();
+        
     }
 }

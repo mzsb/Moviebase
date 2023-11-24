@@ -1,5 +1,6 @@
 ﻿#region Usings
 
+using Microsoft.Extensions.Configuration;
 using Moviebase.API.Extensions;
 
 #endregion
@@ -15,6 +16,7 @@ public class Startup(IConfiguration configuration)
         services.AddEndpointsApiExplorer();
         services.AddCors();
         services.AddSwaggerGen();
+        services.AddIdentityServices(configuration);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -34,6 +36,8 @@ public class Startup(IConfiguration configuration)
             .AllowAnyMethod()
             .AllowCredentials()
             .WithOrigins("https://localhost:4200"));
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.UseEndpoints(endpoints => endpoints.MapControllers());
 
         app.Build();

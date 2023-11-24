@@ -12,7 +12,8 @@ namespace Moviebase.API.Extensions;
 public static class ApplicationServiceExtensions
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration) => services
-        .AddScoped<ITestService, TestService>()
+        .AddScoped<IAccountService, AccountService>()
+        .AddScoped<ITokenService, TokenService>()
         .AddAutoMapper(typeof(AutoMapperProfiles).Assembly)
         .AddSqliteDbContext<MoviebaseDbContext>(configuration.GetDefaultConnectionString());
 }

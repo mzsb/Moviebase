@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Moviebase.DAL;
 
@@ -10,9 +11,11 @@ using Moviebase.DAL;
 namespace Moviebase.DAL.Migrations
 {
     [DbContext(typeof(MoviebaseDbContext))]
-    partial class MoviebaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231123222200_Users")]
+    partial class Users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
