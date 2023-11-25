@@ -1,6 +1,8 @@
 ﻿#region Usings
 
 using Microsoft.EntityFrameworkCore;
+using Moviebase.BLL.Dtos;
+using Moviebase.BLL.Extensions;
 using Moviebase.BLL.Interfaces;
 using Moviebase.DAL;
 using Moviebase.DAL.Model;
@@ -20,5 +22,14 @@ public class GenreService(MoviebaseDbContext context) : IGenreService
         await context.Genres.AddAsync(newGenre);
         await context.SaveChangesAsync();
         return newGenre;
+    }
+
+    public async IAsyncEnumerable<Genre> GetGenresAsync(OMDbDto movieData)
+    {
+        foreach (var rawGenre in movieData.Genre.CommaSplit())
+        {
+            yield return await GetGenreAsync(rawGenre) ??
+                await CreateGenreAsync(rawGenre);
+        }
     }
 }

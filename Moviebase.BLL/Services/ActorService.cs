@@ -1,6 +1,8 @@
 ﻿#region Usings
 
 using Microsoft.EntityFrameworkCore;
+using Moviebase.BLL.Dtos;
+using Moviebase.BLL.Extensions;
 using Moviebase.BLL.Interfaces;
 using Moviebase.DAL;
 using Moviebase.DAL.Model;
@@ -20,5 +22,14 @@ public class ActorService(MoviebaseDbContext context) : IActorService
         await context.Actors.AddAsync(newActor);
         await context.SaveChangesAsync();
         return newActor;
+    }
+
+    public async IAsyncEnumerable<Actor> GetActorsAsync(OMDbDto movieData)
+    {
+        foreach (var rawActor in movieData.Actors.CommaSplit())
+        {
+            yield return await GetActorAsync(rawActor) ??
+                await CreateActorAsync(rawActor);
+        }
     }
 }

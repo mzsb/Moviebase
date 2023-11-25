@@ -8,6 +8,7 @@ using Moviebase.BLL.Interfaces;
 using Moviebase.DAL;
 using Moviebase.DAL.Model;
 using Moviebase.DAL.Model.Identity;
+using System.Collections.Generic;
 
 #endregion
 
@@ -62,26 +63,18 @@ public class SeedService(
         foreach (var movieData in omdbService.GetMovieDatasFromJSONFile("../Moviebase.DAL/movieSeed.json"))
         {
             var newMovie = movieData.ToMovie();
-
-            newMovie.MovieGenres = new List<MovieGenre>();
-            foreach (var rawGenre in movieData.Genre.CommaSplit())
-            {
-                var genre = await genreService.GetGenreAsync(rawGenre) ??
-                    await genreService.CreateGenreAsync(rawGenre);
-
-                newMovie.MovieGenres.Add(new() { Movie = newMovie, Genre = genre });
-            }
-
-            newMovie.MovieActors = new List<MovieActor>();
-            foreach (var rawActor in movieData.Actors.CommaSplit())
-            {
-                var actor = await actorService.GetActorAsync(rawActor) ??
-                    await actorService.CreateActorAsync(rawActor);
-
-                newMovie.MovieActors.Add(new() { Movie = newMovie, Actor = actor });
-            }
-
+            
             await context.AddAsync(newMovie);
+
+            await foreach (var genre in genreService.GetGenresAsync(movieData))
+            {
+                await context.MovieGenres.AddAsync(new() { Movie = newMovie, Genre = genre });
+            }
+
+            await foreach (var actor in actorService.GetActorsAsync(movieData))
+            {
+                await context.MovieActors.AddAsync(new() { Movie = newMovie, Actor = actor });
+            }
         }
         await context.SaveChangesAsync();
     }

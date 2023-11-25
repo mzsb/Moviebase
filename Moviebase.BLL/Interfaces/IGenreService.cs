@@ -1,5 +1,6 @@
 ﻿#region Usings
 
+using Moviebase.BLL.Dtos;
 using Moviebase.DAL.Model;
 
 #endregion
@@ -10,5 +11,7 @@ public interface IGenreService
 {
     Task<Genre?> GetGenreAsync(string rawGenre);
 
-    Task<Genre> CreateGenreAsync(string rawGenre); 
+    Task<Genre> CreateGenreAsync(string rawGenre);
+
+    IAsyncEnumerable<Genre> GetGenresAsync(OMDbDto movieData);
 }

@@ -1,5 +1,6 @@
 ﻿#region Usings
 
+using Moviebase.BLL.Dtos;
 using Moviebase.DAL.Model;
 
 #endregion
@@ -11,4 +12,6 @@ public interface IActorService
     Task<Actor?> GetActorAsync(string rawActor);
 
     Task<Actor> CreateActorAsync(string rawActor);
+
+    IAsyncEnumerable<Actor> GetActorsAsync(OMDbDto movieData);
 }
