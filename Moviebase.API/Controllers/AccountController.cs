@@ -14,7 +14,7 @@ namespace Moviebase.API.Controllers;
 public class AccountController(IAccountService accountService) : ControllerBase
 {
     [HttpPost("login")]
-    public async Task<ActionResult<UserDto>> LoginAsync(LoginDto loginDto)
+    public async Task<ActionResult<LoggedDto>> LoginAsync(LoginDto loginDto)
     {
         try
         {
@@ -27,7 +27,7 @@ public class AccountController(IAccountService accountService) : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<UserDto>> RegisterAsync(RegisterDto registerDto)
+    public async Task<ActionResult<LoggedDto>> RegisterAsync(RegisterDto registerDto)
     {
         try
         {

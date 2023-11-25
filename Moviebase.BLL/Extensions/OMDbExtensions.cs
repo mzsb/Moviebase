@@ -16,8 +16,17 @@ public static class OMDbExtensions
     {
         Title = movieData.Title,
         Year = movieData.Year,
-        PosterId = movieData.Poster.Split("/").Last().Split('.').First(),
-        ImdbRating = decimal.TryParse(movieData.ImdbRating, _numberFormatInfo, out var imdbRating) ?
-            imdbRating : -1
+        PosterId = movieData.Poster.ToPosterId(),
+        ImdbRating = movieData.ImdbRating.ToDecimal()
     };
+
+    public static string ToPosterId(this string posterUrl) =>
+        posterUrl != "N/A" ? 
+            posterUrl.Split("/").Last().Split('.').First() : 
+            string.Empty;
+
+    public static decimal ToDecimal(this string str) =>
+        decimal.TryParse(str, _numberFormatInfo, out var @decimal) ?
+            @decimal :
+            -1;
 }

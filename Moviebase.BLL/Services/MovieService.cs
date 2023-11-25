@@ -34,7 +34,12 @@ public class MovieService(
 
     public async Task<MovieDto> CreateMovieByTitleAsync(CreateMovieDto createMovieDto)
     {
-        var newMovie = await context.Movies.SingleOrDefaultAsync(movie => movie.Title.ToLower() == createMovieDto.Title.ToLower());
+        var newMovie = await context.Movies
+            .Include(movie => movie.MovieGenres)
+            .ThenInclude(movieGenres => movieGenres.Genre)
+            .Include(movie => movie.MovieActors)
+            .ThenInclude(movieActors => movieActors.Actor)
+            .SingleOrDefaultAsync(movie => movie.Title.ToLower() == createMovieDto.Title.ToLower());
 
         if (newMovie is null)
         {

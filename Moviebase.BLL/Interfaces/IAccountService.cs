@@ -8,7 +8,7 @@ namespace Moviebase.BLL.Interfaces;
 
 public interface IAccountService
 {
-    Task<UserDto> LoginAsync(LoginDto loginDto);
+    Task<LoggedDto> LoginAsync(LoginDto loginDto);
 
-    Task<UserDto> RegisterAsync(RegisterDto loginDto);
+    Task<LoggedDto> RegisterAsync(RegisterDto loginDto);
 }

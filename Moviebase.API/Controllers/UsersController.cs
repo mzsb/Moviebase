@@ -1,9 +1,8 @@
 ﻿#region Usings
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Moviebase.DAL;
-using Moviebase.DAL.Model.Identity;
+using Moviebase.BLL.Dtos;
+using Moviebase.BLL.Interfaces;
 
 #endregion
 
@@ -11,9 +10,9 @@ namespace Moviebase.API.Controllers;
 
 [ApiController]
 [Route("api/users")]
-public class UsersController(MoviebaseDbContext context)
+public class UsersController(IUserService userService)
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsersAsync() =>
-        await context.Users.ToListAsync();
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersAsync() =>
+        await userService.GetUsersAsync();
 }

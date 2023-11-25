@@ -19,6 +19,7 @@ public static class IdentityServiceExtensions
     {
         services.AddIdentityCore<User>(options =>
         {
+            //weak development config
             options.Password.RequiredLength = 1;
             options.Password.RequireDigit = false;
             options.Password.RequireUppercase = false;

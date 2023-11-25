@@ -3,6 +3,7 @@
 using AutoMapper;
 using Moviebase.BLL.Dtos;
 using Moviebase.DAL.Model;
+using Moviebase.DAL.Model.Identity;
 
 #endregion
 
@@ -19,6 +20,8 @@ public class AutoMapperProfiles : Profile
                 opt.MapFrom(movie => movie.MovieActors.Select(movieActor => movieActor.Actor)));
         CreateMap<Genre, GenreDto>();
         CreateMap<Actor, ActorDto>();
+        CreateMap<User, UserDto>().ForMember(loggedUserDto => loggedUserDto.UserId, opt =>
+                opt.MapFrom(user => user.Id));
         CreateMap<Review, ReviewDto>()
             .ForMember(reviewDto => reviewDto.Username, opt =>
                 opt.MapFrom(review => review.User.UserName));

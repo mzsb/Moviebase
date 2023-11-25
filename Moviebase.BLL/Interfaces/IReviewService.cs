@@ -9,7 +9,9 @@ namespace Moviebase.BLL.Interfaces;
 
 public interface IReviewService
 {
-    Task<PagedList<ReviewDto>> GetPagedreviewsOfMovieAsync(Guid? movieId, PaginationParams paginationParams);
+    Task<PagedList<ReviewDto>> GetPagedReviewsAsync(PaginationParams paginationParams);
+
+    Task<PagedList<ReviewDto>> GetPagedReviewsOfMovieAsync(Guid movieId, PaginationParams paginationParams);
 
     Task<ReviewDto> CreateReviewAsync(CreateReviewDto createReviewDto);
 }

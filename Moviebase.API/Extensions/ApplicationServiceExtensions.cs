@@ -18,6 +18,7 @@ public static class ApplicationServiceExtensions
         .AddScoped<IGenreService, GenreService>()
         .AddScoped<IActorService, ActorService>()
         .AddScoped<IOMDbService, OMDbService>()
+        .AddScoped<IUserService, UserService>()
         .AddHttpClient()
         .AddScoped<IReviewService, ReviewService>()
         .AddAutoMapper(typeof(AutoMapperProfiles).Assembly)
