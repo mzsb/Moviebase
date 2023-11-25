@@ -12,5 +12,5 @@ public class OMDbDto
 
     public string Poster { get; set; }
 
-    public decimal ImdbRating { get; set; }
+    public string ImdbRating { get; set; }
 }

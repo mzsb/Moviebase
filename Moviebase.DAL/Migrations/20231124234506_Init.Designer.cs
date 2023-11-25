@@ -11,7 +11,7 @@ using Moviebase.DAL;
 namespace Moviebase.DAL.Migrations
 {
     [DbContext(typeof(MoviebaseDbContext))]
-    [Migration("20231124160648_Init")]
+    [Migration("20231124234506_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -102,6 +102,36 @@ namespace Moviebase.DAL.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Moviebase.DAL.Model.Actor", b =>
+                {
+                    b.Property<Guid>("ActorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ActorId");
+
+                    b.ToTable("Actors");
+                });
+
+            modelBuilder.Entity("Moviebase.DAL.Model.Genre", b =>
+                {
+                    b.Property<Guid>("GenreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("GenreId");
+
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("Moviebase.DAL.Model.Identity.Role", b =>
@@ -220,14 +250,6 @@ namespace Moviebase.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Actors")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<decimal>("ImdbRating")
                         .HasColumnType("TEXT");
 
@@ -246,6 +268,48 @@ namespace Moviebase.DAL.Migrations
                     b.HasKey("MovieId");
 
                     b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("Moviebase.DAL.Model.MovieActor", b =>
+                {
+                    b.Property<Guid>("MovieActorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ActorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MovieActorId");
+
+                    b.HasIndex("ActorId");
+
+                    b.HasIndex("MovieId");
+
+                    b.ToTable("MovieActors");
+                });
+
+            modelBuilder.Entity("Moviebase.DAL.Model.MovieGenre", b =>
+                {
+                    b.Property<Guid>("MovieGenreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("GenreId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MovieGenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.HasIndex("MovieId");
+
+                    b.ToTable("MovieGenres");
                 });
 
             modelBuilder.Entity("Moviebase.DAL.Model.Review", b =>
@@ -331,6 +395,44 @@ namespace Moviebase.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Moviebase.DAL.Model.MovieActor", b =>
+                {
+                    b.HasOne("Moviebase.DAL.Model.Actor", "Actor")
+                        .WithMany("MovieActors")
+                        .HasForeignKey("ActorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Moviebase.DAL.Model.Movie", "Movie")
+                        .WithMany("MovieActors")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Actor");
+
+                    b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("Moviebase.DAL.Model.MovieGenre", b =>
+                {
+                    b.HasOne("Moviebase.DAL.Model.Genre", "Genre")
+                        .WithMany("MovieGenres")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Moviebase.DAL.Model.Movie", "Movie")
+                        .WithMany("MovieGenres")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Genre");
+
+                    b.Navigation("Movie");
+                });
+
             modelBuilder.Entity("Moviebase.DAL.Model.Review", b =>
                 {
                     b.HasOne("Moviebase.DAL.Model.Movie", "Movie")
@@ -350,6 +452,16 @@ namespace Moviebase.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Moviebase.DAL.Model.Actor", b =>
+                {
+                    b.Navigation("MovieActors");
+                });
+
+            modelBuilder.Entity("Moviebase.DAL.Model.Genre", b =>
+                {
+                    b.Navigation("MovieGenres");
+                });
+
             modelBuilder.Entity("Moviebase.DAL.Model.Identity.Role", b =>
                 {
                     b.Navigation("UserRoles");
@@ -364,6 +476,10 @@ namespace Moviebase.DAL.Migrations
 
             modelBuilder.Entity("Moviebase.DAL.Model.Movie", b =>
                 {
+                    b.Navigation("MovieActors");
+
+                    b.Navigation("MovieGenres");
+
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

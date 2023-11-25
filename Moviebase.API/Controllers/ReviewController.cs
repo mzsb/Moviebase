@@ -1,5 +1,6 @@
 ﻿#region Usings
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moviebase.API.Extensions;
 using Moviebase.BLL.Dtos;
@@ -14,7 +15,7 @@ namespace Moviebase.API.Controllers;
 [Route("api/reviews")]
 public class ReviewController(IReviewService reviewService) : ControllerBase
 {
-    [HttpGet("/")]
+    [HttpGet]
     [HttpGet("/{movieId?}")]
     public async Task<ActionResult<IEnumerable<ReviewDto>>> GetPagedreviewsOfMovieAsync(
         Guid? movieId,
@@ -27,6 +28,7 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
         return reviews;
     }
 
+    //[Authorize(Policy = "RequireUserRole")]
     [HttpPost]
     public async Task<ActionResult<ReviewDto>> CreateReviewAsync([FromQuery] CreateReviewDto createReviewDto) =>
         await reviewService.CreateReviewAsync(createReviewDto);

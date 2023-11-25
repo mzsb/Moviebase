@@ -8,11 +8,11 @@ public class MovieDto
 
     public string Year { get; set; }
 
-    public string Genre { get; set; }
-
-    public string Actors { get; set; }
-
     public string PosterId { get; set; }
 
     public decimal ImdbRating { get; set; }
+
+    public IEnumerable<GenreDto> Genres { get; set; }
+
+    public IEnumerable<ActorDto> Actors { get; set; }
 }

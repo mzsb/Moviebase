@@ -2,6 +2,7 @@
 
 using Moviebase.BLL.Dtos;
 using Moviebase.BLL.Helpers;
+using Moviebase.DAL.Model;
 
 #endregion
 

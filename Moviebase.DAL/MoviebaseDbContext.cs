@@ -15,6 +15,14 @@ public class MoviebaseDbContext(DbContextOptions<MoviebaseDbContext> options) : 
 {
     public DbSet<Movie> Movies { get; set; }
 
+    public DbSet<Genre> Genres { get; set; }
+
+    public DbSet<MovieGenre> MovieGenres { get; set; }
+
+    public DbSet<Actor> Actors { get; set; }
+
+    public DbSet<MovieActor> MovieActors { get; set; }
+
     public DbSet<Review> Reviews { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -43,6 +51,30 @@ public class MoviebaseDbContext(DbContextOptions<MoviebaseDbContext> options) : 
             .HasMany(movie => movie.Reviews)
             .WithOne(review => review.Movie)
             .HasForeignKey(review => review.MovieId)
+            .IsRequired();
+
+        builder.Entity<Movie>()
+            .HasMany(movie => movie.MovieGenres)
+            .WithOne(movieGenre => movieGenre.Movie)
+            .HasForeignKey(movieGenre => movieGenre.MovieId)
+            .IsRequired();
+
+        builder.Entity<Genre>()
+            .HasMany(genre => genre.MovieGenres)
+            .WithOne(movieGenre => movieGenre.Genre)
+            .HasForeignKey(movieGenre => movieGenre.GenreId)
+            .IsRequired();
+
+        builder.Entity<Movie>()
+            .HasMany(movie => movie.MovieActors)
+            .WithOne(movieActors => movieActors.Movie)
+            .HasForeignKey(movieActors => movieActors.MovieId)
+            .IsRequired();
+
+        builder.Entity<Actor>()
+            .HasMany(actor => actor.MovieActors)
+            .WithOne(movieActors => movieActors.Actor)
+            .HasForeignKey(movieActors => movieActors.ActorId)
             .IsRequired();
     }
 }

@@ -8,13 +8,13 @@ public class Movie
 
     public string Year { get; set; }
 
-    public string Genre { get; set; }
-
-    public string Actors { get; set; }
-
     public string PosterId { get; set; }
 
     public decimal ImdbRating { get; set; }
+
+    public ICollection<MovieGenre> MovieGenres { get; set; }
+
+    public ICollection<MovieActor> MovieActors { get; set; }
 
     public ICollection<Review>? Reviews { get; set; }
 }

@@ -12,8 +12,15 @@ public class AutoMapperProfiles : Profile
 {
     public AutoMapperProfiles()
     {
-        CreateMap<Movie, MovieDto>();
-        CreateMap<Review, ReviewDto>().ForMember(reviewDto => reviewDto.Username, opt =>
-            opt.MapFrom(review => review.User.UserName));
+        CreateMap<Movie, MovieDto>()
+            .ForMember(movieDto => movieDto.Genres, opt =>
+                opt.MapFrom(movie => movie.MovieGenres.Select(movieGenre => movieGenre.Genre)))
+            .ForMember(movieDto => movieDto.Actors, opt =>
+                opt.MapFrom(movie => movie.MovieActors.Select(movieActor => movieActor.Actor)));
+        CreateMap<Genre, GenreDto>();
+        CreateMap<Actor, ActorDto>();
+        CreateMap<Review, ReviewDto>()
+            .ForMember(reviewDto => reviewDto.Username, opt =>
+                opt.MapFrom(review => review.User.UserName));
     }
 }

@@ -17,7 +17,8 @@ public class SeedService(
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
         IOMDbService omdbService,
-        IReviewService reviewService,
+        IGenreService genreService,
+        IActorService actorService,
         MoviebaseDbContext context) : ISeedService
 {
     private readonly string _adminName = "admin";
@@ -58,11 +59,30 @@ public class SeedService(
 
     private async Task SeedMoviesAsync()
     {
-        await context.AddRangeAsync(omdbService
-            .GetMovieDatasFromJSONFile("../Moviebase.DAL/movieSeed.json")
-            .Select(movieData => movieData.ToMovie())
-        );
+        foreach (var movieData in omdbService.GetMovieDatasFromJSONFile("../Moviebase.DAL/movieSeed.json"))
+        {
+            var newMovie = movieData.ToMovie();
 
+            newMovie.MovieGenres = new List<MovieGenre>();
+            foreach (var rawGenre in movieData.Genre.CommaSplit())
+            {
+                var genre = await genreService.GetGenreAsync(rawGenre) ??
+                    await genreService.CreateGenreAsync(rawGenre);
+
+                newMovie.MovieGenres.Add(new() { Movie = newMovie, Genre = genre });
+            }
+
+            newMovie.MovieActors = new List<MovieActor>();
+            foreach (var rawActor in movieData.Actors.CommaSplit())
+            {
+                var actor = await actorService.GetActorAsync(rawActor) ??
+                    await actorService.CreateActorAsync(rawActor);
+
+                newMovie.MovieActors.Add(new() { Movie = newMovie, Actor = actor });
+            }
+
+            await context.AddAsync(newMovie);
+        }
         await context.SaveChangesAsync();
     }
 

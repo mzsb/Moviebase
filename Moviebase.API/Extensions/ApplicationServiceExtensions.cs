@@ -15,6 +15,8 @@ public static class ApplicationServiceExtensions
         .AddScoped<IAccountService, AccountService>()
         .AddScoped<ITokenService, TokenService>()
         .AddScoped<IMovieService, MovieService>()
+        .AddScoped<IGenreService, GenreService>()
+        .AddScoped<IActorService, ActorService>()
         .AddScoped<IOMDbService, OMDbService>()
         .AddHttpClient()
         .AddScoped<IReviewService, ReviewService>()

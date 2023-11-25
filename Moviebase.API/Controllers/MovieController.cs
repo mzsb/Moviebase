@@ -24,6 +24,7 @@ public class MovieController(IMovieService movieService) : ControllerBase
         return movies;
     }
 
+    //[Authorize(Policy = "RequireAdminRole")]
     [HttpPost]
     public async Task<ActionResult<MovieDto>> CreateMovieAsync([FromBody] CreateMovieDto createMovieDto) =>
         await movieService.CreateMovieByTitleAsync(createMovieDto);
