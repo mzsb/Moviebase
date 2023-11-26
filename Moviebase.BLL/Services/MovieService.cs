@@ -64,4 +64,8 @@ public class MovieService(
 
         return mapper.Map<MovieDto>(newMovie);
     }
+
+    public async Task DeleteMovieAsync(Guid movieId) => await context.Movies
+        .Where(movie => movie.MovieId == movieId)
+        .ExecuteDeleteAsync();
 }

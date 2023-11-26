@@ -6,6 +6,7 @@ using Moviebase.API.Extensions;
 using Moviebase.BLL.Dtos;
 using Moviebase.BLL.Helpers;
 using Moviebase.BLL.Interfaces;
+using Moviebase.BLL.Services;
 using System.ComponentModel;
 
 #endregion
@@ -16,6 +17,7 @@ namespace Moviebase.API.Controllers;
 [Route("api/reviews")]
 public class ReviewController(IReviewService reviewService) : ControllerBase
 {
+    private const string _exampleReviewId = "63d40f42-506a-4794-93f8-8378dfe5d600";
     private const string _exampleMovieId = "35856fc5-f427-458f-a0a5-13a8ab381f33";
 
     [HttpGet]
@@ -29,7 +31,7 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
         return reviews;
     }
 
-    [HttpGet("{movieId?}")]
+    [HttpGet("{movieId}")]
     public async Task<ActionResult<IEnumerable<ReviewDto>>> GetPagedReviewsOfMovieAsync(
         [DefaultValue(typeof(Guid), _exampleMovieId)] Guid movieId,
         [FromQuery] PaginationParams paginationParams)
@@ -45,4 +47,15 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ReviewDto>> CreateReviewAsync([FromQuery] CreateReviewDto createReviewDto) =>
         await reviewService.CreateReviewAsync(createReviewDto);
+
+    [HttpPut("{reviewId}")]
+    public async Task<ActionResult<ReviewDto>> UpdateReviewAsync(
+        [DefaultValue(typeof(Guid), _exampleReviewId)] Guid reviewId,
+        UpdateReviewDto updateReviewDto) =>
+        await reviewService.UpdateReviewAsync(reviewId, updateReviewDto);
+
+    [HttpDelete("{reviewId}")]
+    public async Task DeleteReviewAsync(
+        [DefaultValue(typeof(Guid), _exampleReviewId)] Guid reviewId) => 
+        await reviewService.DeleteReviewAsync(reviewId);
 }

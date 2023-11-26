@@ -10,6 +10,7 @@ using Moviebase.BLL.Helpers;
 using Moviebase.BLL.Interfaces;
 using Moviebase.DAL;
 using Moviebase.DAL.Model;
+using System.Linq;
 
 #endregion
 
@@ -55,4 +56,23 @@ public class ReviewService(MoviebaseDbContext context, IMapper mapper) : IReview
         return result > 0 ? mapper.Map<ReviewDto>(newReview) : 
             throw new ReviewException("Review creation failed");
     }
+
+    public async Task<ReviewDto> UpdateReviewAsync(Guid reviewId, UpdateReviewDto updateReviewDto)
+    {
+        var review = await context.Reviews
+            .Include(review => review.User)
+            .SingleOrDefaultAsync(review => review.ReviewId == reviewId)
+                ?? throw new ReviewException("Review not exists");
+
+        review.Content = updateReviewDto.Content;
+
+        var result = await context.SaveChangesAsync();
+
+        return result > 0 ? mapper.Map<ReviewDto>(review) :
+            throw new ReviewException("Review updation failed");
+    }
+
+    public async Task DeleteReviewAsync(Guid reviewId) => await context.Reviews
+        .Where(review => review.ReviewId == reviewId)
+        .ExecuteDeleteAsync();
 }

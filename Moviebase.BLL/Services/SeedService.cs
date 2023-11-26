@@ -22,7 +22,9 @@ public class SeedService(
         MoviebaseDbContext context) : ISeedService
 {
     private readonly Guid _adminId = Guid.Parse("a25cbf32-d93d-4ab9-984f-21290f393d8c");
+    private readonly Guid _exampleUserId = Guid.Parse("e214ce42-f4f4-4859-ba1d-db6ab1f21f75");
     private readonly Guid _exampleMovieId = Guid.Parse("35856fc5-f427-458f-a0a5-13a8ab381f33");
+    private readonly Guid _exampleReviewId = Guid.Parse("63d40f42-506a-4794-93f8-8378dfe5d600");
     private readonly string _adminName = "admin";
     private readonly string _adminPassword = "admin";
     private readonly string _adminRole = "Admin";
@@ -52,8 +54,11 @@ public class SeedService(
             .RuleFor(user => user.UserName, x => x.Name.FirstName())
             .RuleFor(user => user.Created, x => x.Date.Past(2));
 
+        var isFirst = true;
         foreach (var user in userFaker.GenerateLazy(_userCount))
         {
+            if (isFirst) { user.Id = _exampleUserId; isFirst = false; }
+
             await userManager.CreateAsync(user, user.UserName ?? "Password");
             await userManager.AddToRoleAsync(user, _userRole);
         }
@@ -89,12 +94,15 @@ public class SeedService(
             .RuleFor(user => user.Content, x => x.Lorem.Text())
             .RuleFor(user => user.CreationDate, x => x.Date.Past(2));
 
+        var isFirst = true;
         foreach (var movie in await context.Movies.ToListAsync())
         {
             foreach (var user in await userManager.Users.ToListAsync())
             {
                 foreach (var review in reviewFaker.GenerateLazy(_reviwsPerUserForMovieCount))
                 {
+                    if (isFirst) { review.ReviewId = _exampleReviewId; isFirst = false; }
+                    
                     review.User = user;
                     review.Movie = movie;
 

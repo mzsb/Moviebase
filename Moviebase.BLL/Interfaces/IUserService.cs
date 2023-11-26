@@ -9,4 +9,6 @@ namespace Moviebase.BLL.Interfaces;
 public interface IUserService
 {
     Task<List<UserDto>> GetUsersAsync();
+
+    Task DeleteUserAsync(Guid userId);
 }

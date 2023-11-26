@@ -14,4 +14,8 @@ public interface IReviewService
     Task<PagedList<ReviewDto>> GetPagedReviewsOfMovieAsync(Guid movieId, PaginationParams paginationParams);
 
     Task<ReviewDto> CreateReviewAsync(CreateReviewDto createReviewDto);
+
+    Task<ReviewDto> UpdateReviewAsync(Guid reviewId, UpdateReviewDto updateReviewDto);
+
+    Task DeleteReviewAsync(Guid movieId);
 }
