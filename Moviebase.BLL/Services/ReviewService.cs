@@ -72,7 +72,11 @@ public class ReviewService(MoviebaseDbContext context, IMapper mapper) : IReview
             throw new ReviewException("Review updation failed");
     }
 
-    public async Task DeleteReviewAsync(Guid reviewId) => await context.Reviews
+    public async Task DeleteReviewAsync(Guid reviewId)
+    {
+        if (await context.Reviews
         .Where(review => review.ReviewId == reviewId)
-        .ExecuteDeleteAsync();
+        .ExecuteDeleteAsync() < 1)
+            throw new ReviewException("Review deletion failed");
+    }
 }

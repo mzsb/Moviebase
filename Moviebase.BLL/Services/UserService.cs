@@ -5,8 +5,10 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moviebase.BLL.Dtos;
+using Moviebase.BLL.Exceptions;
 using Moviebase.BLL.Interfaces;
 using Moviebase.DAL;
+using Moviebase.DAL.Model;
 using Moviebase.DAL.Model.Identity;
 
 #endregion
@@ -21,7 +23,11 @@ public class UserService(
         await userManager.Users
             .ProjectTo<UserDto>(mapper.ConfigurationProvider)
             .ToListAsync();
-    public async Task DeleteUserAsync(Guid userId) => await userManager.Users
+    public async Task DeleteUserAsync(Guid userId)
+    {
+        if (await userManager.Users
         .Where(user => user.Id == userId)
-        .ExecuteDeleteAsync();
+        .ExecuteDeleteAsync() < 1)
+            throw new UserException("User deletion failed");
+    }
 }

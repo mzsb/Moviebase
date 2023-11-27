@@ -12,6 +12,10 @@ public interface IMovieService
 {
     Task<PagedList<MovieDto>> GetPagedMoviesAsync(PaginationParams paginationParams);
 
+    Task<List<MovieTitleDto>> GetMovieTitlesAsync();
+
+    Task<MovieDto> GetMovieByIdAsync(Guid movieId);
+
     Task<MovieDto> CreateMovieByTitleAsync(CreateMovieDto createMovieDto);
 
     Task DeleteMovieAsync(Guid movieId);

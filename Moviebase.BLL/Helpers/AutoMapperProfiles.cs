@@ -25,5 +25,6 @@ public class AutoMapperProfiles : Profile
         CreateMap<Review, ReviewDto>()
             .ForMember(reviewDto => reviewDto.Username, opt =>
                 opt.MapFrom(review => review.User.UserName));
+
     }
 }

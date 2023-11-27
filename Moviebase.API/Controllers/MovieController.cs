@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Moviebase.API.Extensions;
 using Moviebase.BLL.Dtos;
+using Moviebase.BLL.Exceptions;
 using Moviebase.BLL.Helpers;
 using Moviebase.BLL.Interfaces;
 using System.ComponentModel;
@@ -14,8 +15,7 @@ namespace Moviebase.API.Controllers;
 [ApiController]
 [Route("api/movies")]
 public class MovieController(
-    IMovieService movieService,
-    IConfiguration configurationű) : ControllerBase
+    IMovieService movieService) : ControllerBase
 {
     private const string _exampleMovieId = "35856fc5-f427-458f-a0a5-13a8ab381f33";
 
@@ -29,12 +29,52 @@ public class MovieController(
         return movies;
     }
 
+    [HttpGet("{movieId}")]
+    public async Task<ActionResult<MovieDto>> GetMovieByIdAsync(
+        [DefaultValue(typeof(Guid), _exampleMovieId)] Guid movieId)
+    {
+        try
+        {
+            return await movieService.GetMovieByIdAsync(movieId);
+        }
+        catch(MovieException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+
+    [HttpGet("title")]
+    public async Task<ActionResult<IEnumerable<MovieTitleDto>>> GetMovieTitlesAsync() =>
+        await movieService.GetMovieTitlesAsync();
+
+
     //[Authorize(Policy = "RequireAdminRole")]
     [HttpPost]
-    public async Task<ActionResult<MovieDto>> CreateMovieAsync([FromBody] CreateMovieDto createMovieDto) =>
-        await movieService.CreateMovieByTitleAsync(createMovieDto);
+    public async Task<ActionResult<MovieDto>> CreateMovieAsync([FromBody] CreateMovieDto createMovieDto)
+    {
+        try
+        {
+            return await movieService.CreateMovieByTitleAsync(createMovieDto);
+        }
+        catch (MovieException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
+    //[Authorize(Policy = "RequireAdminRole")]
     [HttpDelete("{movieId}")]
-    public async Task DeleteMovieAsync([DefaultValue(typeof(Guid), _exampleMovieId)]  Guid movieId) => 
-        await movieService.DeleteMovieAsync(movieId);
+    public async Task<ActionResult> DeleteMovieAsync(
+        [DefaultValue(typeof(Guid), _exampleMovieId)] Guid movieId)
+    {
+        try
+        {
+            await movieService.DeleteMovieAsync(movieId);
+            return Ok("Movie deletion success");
+        }
+        catch (MovieException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

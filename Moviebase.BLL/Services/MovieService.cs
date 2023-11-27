@@ -32,6 +32,24 @@ public class MovieService(
             .ProjectTo<MovieDto>(mapper.ConfigurationProvider)
             .ToPagedListAsync(paginationParams);
 
+    public async Task<List<MovieTitleDto>> GetMovieTitlesAsync() =>
+        await context.Movies
+            .Select(movie => new MovieTitleDto
+            {
+                MovieId = movie.MovieId,
+                Title = movie.Title
+            })
+            .ToListAsync();
+
+    public async Task<MovieDto> GetMovieByIdAsync(Guid movieId) =>
+        mapper.Map<MovieDto>(await context.Movies
+            .Include(movie => movie.MovieGenres)
+            .ThenInclude(movieGenre => movieGenre.Genre)
+            .Include(movie => movie.MovieActors)
+            .ThenInclude(movieGenre => movieGenre.Actor)
+            .SingleOrDefaultAsync(movie => movie.MovieId == movieId)
+            ?? throw new MovieException("Movie not found"));
+
     public async Task<MovieDto> CreateMovieByTitleAsync(CreateMovieDto createMovieDto)
     {
         var newMovie = await context.Movies
@@ -65,7 +83,11 @@ public class MovieService(
         return mapper.Map<MovieDto>(newMovie);
     }
 
-    public async Task DeleteMovieAsync(Guid movieId) => await context.Movies
+    public async Task DeleteMovieAsync(Guid movieId) 
+    {
+        if (await context.Movies
         .Where(movie => movie.MovieId == movieId)
-        .ExecuteDeleteAsync();
+        .ExecuteDeleteAsync() < 1)
+            throw new MovieException("Movie deletion failed");
+    } 
 }

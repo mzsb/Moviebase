@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moviebase.API.Extensions;
 using Moviebase.BLL.Dtos;
+using Moviebase.BLL.Exceptions;
 using Moviebase.BLL.Helpers;
 using Moviebase.BLL.Interfaces;
-using Moviebase.BLL.Services;
 using System.ComponentModel;
 
 #endregion
@@ -45,17 +45,46 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
 
     //[Authorize(Policy = "RequireUserRole")]
     [HttpPost]
-    public async Task<ActionResult<ReviewDto>> CreateReviewAsync([FromQuery] CreateReviewDto createReviewDto) =>
-        await reviewService.CreateReviewAsync(createReviewDto);
+    public async Task<ActionResult<ReviewDto>> CreateReviewAsync([FromQuery] CreateReviewDto createReviewDto)
+    {
+        try
+        {
+            return await reviewService.CreateReviewAsync(createReviewDto);
+        } catch(ReviewException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
+    //[Authorize(Policy = "RequireUserRole")]
     [HttpPut("{reviewId}")]
     public async Task<ActionResult<ReviewDto>> UpdateReviewAsync(
         [DefaultValue(typeof(Guid), _exampleReviewId)] Guid reviewId,
-        UpdateReviewDto updateReviewDto) =>
-        await reviewService.UpdateReviewAsync(reviewId, updateReviewDto);
+        UpdateReviewDto updateReviewDto)
+    {
+        try
+        {
+            return await reviewService.UpdateReviewAsync(reviewId, updateReviewDto);
+        }
+        catch (ReviewException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
+    //[Authorize(Policy = "RequireUserRole")]
     [HttpDelete("{reviewId}")]
-    public async Task DeleteReviewAsync(
-        [DefaultValue(typeof(Guid), _exampleReviewId)] Guid reviewId) => 
-        await reviewService.DeleteReviewAsync(reviewId);
+    public async Task<ActionResult> DeleteReviewAsync(
+        [DefaultValue(typeof(Guid), _exampleReviewId)] Guid reviewId)
+    {
+        try
+        {
+            await reviewService.DeleteReviewAsync(reviewId);
+            return Ok("Review deletion success");
+        }
+        catch (ReviewException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
