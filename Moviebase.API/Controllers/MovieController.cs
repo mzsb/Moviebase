@@ -20,7 +20,8 @@ public class MovieController(
     private const string _exampleMovieId = "35856fc5-f427-458f-a0a5-13a8ab381f33";
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MovieDto>>> GetPagedMoviesAsync([FromQuery] PaginationParams paginationParams)
+    public async Task<ActionResult<IEnumerable<MovieDto>>> GetPagedMoviesAsync(
+        [FromQuery] PaginationParams paginationParams)
     {
         var movies = await movieService.GetPagedMoviesAsync(paginationParams);
 
@@ -47,10 +48,10 @@ public class MovieController(
     public async Task<ActionResult<IEnumerable<MovieTitleDto>>> GetMovieTitlesAsync() =>
         await movieService.GetMovieTitlesAsync();
 
-
     //[Authorize(Policy = "RequireAdminRole")]
     [HttpPost]
-    public async Task<ActionResult<MovieDto>> CreateMovieAsync([FromBody] CreateMovieDto createMovieDto)
+    public async Task<ActionResult<MovieDto>> CreateMovieAsync(
+        [FromBody] CreateMovieDto createMovieDto)
     {
         try
         {

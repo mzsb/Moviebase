@@ -45,7 +45,8 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
 
     //[Authorize(Policy = "RequireUserRole")]
     [HttpPost]
-    public async Task<ActionResult<ReviewDto>> CreateReviewAsync([FromQuery] CreateReviewDto createReviewDto)
+    public async Task<ActionResult<ReviewDto>> CreateReviewAsync(
+        [FromBody] CreateReviewDto createReviewDto)
     {
         try
         {
@@ -60,7 +61,7 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
     [HttpPut("{reviewId}")]
     public async Task<ActionResult<ReviewDto>> UpdateReviewAsync(
         [DefaultValue(typeof(Guid), _exampleReviewId)] Guid reviewId,
-        UpdateReviewDto updateReviewDto)
+        [FromBody] UpdateReviewDto updateReviewDto)
     {
         try
         {
