@@ -18,6 +18,7 @@ public class AutoMapperProfiles : Profile
                 opt.MapFrom(movie => movie.MovieGenres.Select(movieGenre => movieGenre.Genre)))
             .ForMember(movieDto => movieDto.Actors, opt =>
                 opt.MapFrom(movie => movie.MovieActors.Select(movieActor => movieActor.Actor)));
+        CreateMap<Movie, MovieTitleDto>();
         CreateMap<Genre, GenreDto>();
         CreateMap<Actor, ActorDto>();
         CreateMap<User, UserDto>().ForMember(loggedUserDto => loggedUserDto.UserId, opt =>

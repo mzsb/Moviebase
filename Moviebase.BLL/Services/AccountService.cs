@@ -20,6 +20,10 @@ public class AccountService(
 {
     public async Task<LoggedDto> LoginAsync(LoginDto loginDto)
     {
+        if (string.IsNullOrEmpty(loginDto.Username)) throw new AccountException("Invalid username");
+
+        if (string.IsNullOrEmpty(loginDto.Password)) throw new AccountException("Invalid password");
+
         var user = await userManager.Users.SingleOrDefaultAsync(user => user.UserName == loginDto.Username) 
             ?? throw new AccountException("Invalid username");
 
@@ -37,6 +41,10 @@ public class AccountService(
 
     public async Task<LoggedDto> RegisterAsync(RegisterDto registerDto)
     {
+        if (string.IsNullOrEmpty(registerDto.Username)) throw new AccountException("Invalid username");
+
+        if (string.IsNullOrEmpty(registerDto.Password)) throw new AccountException("Invalid password");
+
         var user = new User { UserName = registerDto.Username };
 
         try

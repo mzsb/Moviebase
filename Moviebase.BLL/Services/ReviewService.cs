@@ -35,6 +35,8 @@ public class ReviewService(MoviebaseDbContext context, IMapper mapper) : IReview
 
     public async Task<ReviewDto> CreateReviewAsync(CreateReviewDto createReviewDto)
     {
+        if (string.IsNullOrEmpty(createReviewDto.Content)) throw new ReviewException("Invalid review content");
+
         var user = await context.Users.SingleOrDefaultAsync(user => user.Id == createReviewDto.UserId)
             ?? throw new ReviewException("User not exists");
 
@@ -59,6 +61,8 @@ public class ReviewService(MoviebaseDbContext context, IMapper mapper) : IReview
 
     public async Task<ReviewDto> UpdateReviewAsync(Guid reviewId, UpdateReviewDto updateReviewDto)
     {
+        if (string.IsNullOrEmpty(updateReviewDto.Content)) throw new ReviewException("Invalid review content");
+
         var review = await context.Reviews
             .Include(review => review.User)
             .SingleOrDefaultAsync(review => review.ReviewId == reviewId)

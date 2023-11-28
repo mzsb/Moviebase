@@ -34,11 +34,7 @@ public class MovieService(
 
     public async Task<List<MovieTitleDto>> GetMovieTitlesAsync() =>
         await context.Movies
-            .Select(movie => new MovieTitleDto
-            {
-                MovieId = movie.MovieId,
-                Title = movie.Title
-            })
+            .ProjectTo<MovieTitleDto>(mapper.ConfigurationProvider)
             .ToListAsync();
 
     public async Task<MovieDto> GetMovieByIdAsync(Guid movieId) =>
@@ -52,6 +48,8 @@ public class MovieService(
 
     public async Task<MovieDto> CreateMovieByTitleAsync(CreateMovieDto createMovieDto)
     {
+        if (string.IsNullOrEmpty(createMovieDto.Title)) throw new MovieException("Invalid movie title");
+
         var newMovie = await context.Movies
             .Include(movie => movie.MovieGenres)
             .ThenInclude(movieGenres => movieGenres.Genre)

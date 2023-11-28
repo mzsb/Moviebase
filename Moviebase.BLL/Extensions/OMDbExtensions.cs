@@ -3,14 +3,17 @@
 using Moviebase.BLL.Dtos;
 using Moviebase.DAL.Model;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 #endregion
 
 namespace Moviebase.BLL.Extensions;
 
-public static class OMDbExtensions
+public static partial class OMDbExtensions
 {
-    private readonly static NumberFormatInfo _numberFormatInfo = new(){ NumberDecimalSeparator = "." };
+    private static readonly Regex _posterUrlRegex = PosterUrlRegex();
+
+    private static readonly NumberFormatInfo _numberFormatInfo = new(){ NumberDecimalSeparator = "." };
 
     public static Movie ToMovie(this OMDbDto movieData) => new()
     {
@@ -21,12 +24,15 @@ public static class OMDbExtensions
     };
 
     public static string ToPosterId(this string posterUrl) =>
-        posterUrl != "N/A" ? 
-            posterUrl.Split("/").Last().Split('.').First() : 
+        _posterUrlRegex.IsMatch(posterUrl) ? 
+            posterUrl[36..^14] : 
             string.Empty;
 
     public static decimal ToDecimal(this string str) =>
         decimal.TryParse(str, _numberFormatInfo, out var @decimal) ?
             @decimal :
             -1;
+
+    [GeneratedRegex("https://m.media-amazon.com/images/M/.+._V1_SX300.jpg", RegexOptions.Compiled)]
+    private static partial Regex PosterUrlRegex();
 }
