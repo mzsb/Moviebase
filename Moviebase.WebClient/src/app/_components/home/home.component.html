@@ -1,25 +1,26 @@
 <div class="container-fluid transparent">
 
-    <div class="row welcome title">
-        <div class="col-md-5">
-            Welcome to Moviebase
-            <mat-divider></mat-divider>
-        </div>
-    </div>
+    <mat-grid-list class="movie-grid" cols="3" rowHeight="3:4">
+        <mat-grid-tile *ngFor="let movie of movies">
+            <mat-card class="movie container">
+                <div class="detailes">
+                    <p class="title">{{movie.title}}</p>
+                    <p class="year">{{movie.year}}</p>
+                    <p class="genre">{{movie.genres | map:'name' | join:', ' }}</p>
+                </div>
+                <img class="poster" src="https://m.media-amazon.com/images/M/{{movie.posterId}}._V1_SX300.jpg">
+            </mat-card>
+        </mat-grid-tile>
+    </mat-grid-list>
 
-
-    <div class="row welcome sub-title">
-        <div class="col-md-6">
-            Your go-to destination for all things movies!
-        </div>
-    </div>
-
-    <div class="row welcome content">
-        <div class="col-md-8">
-            Immerse yourself in the captivating world of cinema and share your thoughts by writing reviews for your favorite films. Whether you're into timeless classics or the latest blockbusters, Moviebase is your one-stop film database.
-            Discover new releases, browse through a diverse range of genres, and read reviews crafted by fellow movie enthusiasts. Join our vibrant community of film lovers, where your opinions matter. Register now to unlock exclusive content and be part of the cinematic conversation.
-            it back, relax, and explore the vast universe of movies with Moviebase - where every film has a story, and every opinion adds to the narrative. Start your cinematic journey with us today!
-        </div>
-    </div>
-
+    <mat-paginator
+        fixed
+        *ngIf="pagination"
+        hidePageSize="true"
+        showFirstLastButtons
+        [length]="pagination.totalCount"
+        [pageSize]="pageSize"
+        (page)="pageChanged($event)">
+    </mat-paginator>
+    
 </div>

@@ -1,24 +1,92 @@
-.welcome {
-    color: var(--primary-text-color);
-    justify-content: center;
-    justify-items: center;
-    text-align: center;
+.container-fluid {
+    padding: 0;
+}
+
+.movie {
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+.poster {
+    width: 100%;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+    z-index: 2;
+}
+
+.poster:hover {
+    opacity: 0.1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.detailes {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -25%);
+    z-index: 1;
 }
 
 .title {
-    padding-top: 10%;
-    font-size: xxx-large;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   text-align: center;
+   font-size: 4vw;
+   margin-bottom: 0;
 }
 
-.sub-title {
-    font-size: x-large;
+.year {
+    text-align: center;
+    font-size: 3vw;
+    margin-bottom: 0;
+ }
+
+ .genre {
+    text-align: center;
+    font-size: 2vw;
+    font-style: italic;
+    margin-bottom: 0;
+ }
+
+.mat-mdc-paginator {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+    opacity: 0.5;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 3;
+} 
+
+.mat-mdc-paginator:hover {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+} 
+
+.mat-mdc-paginator-navigation {
+    display: flex;
 }
 
-.content {
-    padding-top: 2%;
-    font-size: large;
-    text-align: start;
-    color: var(--secondary-text-color);
-    text-indent: 30px;
+::ng-deep .mat-mdc-paginator-navigation-fist {
+    order: 1;
 }
+
+::ng-deep .mat-mdc-paginator-navigation-previous {
+    order: 2;
+}
+
+::ng-deep .mat-mdc-paginator-range-label {
+    order: 3;
+}
+
+::ng-deep .mat-mdc-paginator-navigation-next {
+    order: 4;
+}
+
+::ng-deep .mat-mdc-paginator-navigation-last {
+    order: 5;
+}
+
+
