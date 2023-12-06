@@ -11,8 +11,8 @@ using Moviebase.DAL;
 namespace Moviebase.DAL.Migrations
 {
     [DbContext(typeof(MoviebaseDbContext))]
-    [Migration("20231124234506_Init")]
-    partial class Init
+    [Migration("20231130175653_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -323,6 +323,9 @@ namespace Moviebase.DAL.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastUpdationDate")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("MovieId")

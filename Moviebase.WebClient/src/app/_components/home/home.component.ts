@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../_services/movie.service';
 import { Movie } from '../../models/movie';
 import { Pagination } from '../../models/pagination';
+import { PageEvent } from '@angular/material/paginator';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { LoadingService } from '../../_services/loading.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -9,13 +13,13 @@ import { Pagination } from '../../models/pagination';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit { 
-  movies: Movie[] = [];
-  displayedColumns: string[] = ['movieId'];
-  pageNumber = 1;
-  pageSize = 9;
-  pagination: Pagination | undefined;
+  movies: Movie[] = []
+  pageNumber = 1
+  pageSize = 12
+  pagination: Pagination | undefined
+  isLoading: boolean = false
 
-  constructor(private movieService: MovieService){}
+  constructor(private movieService: MovieService) {}
 
   ngOnInit() {
     this.loadMovies()
@@ -23,21 +27,34 @@ export class HomeComponent implements OnInit {
 
   ngAfterViewChecked() {
     if(this.pagination) {
-      const list = document.getElementsByClassName('mat-mdc-paginator-range-label');
-      list[0].innerHTML = `${this.pageNumber} / ${Math.ceil(this.pagination!.totalCount / this.pageSize)}`;
+      const list = document.getElementsByClassName('mat-mdc-paginator-range-label')
+      list[0].innerHTML = this.pageNumber.toString()
     }
   }
 
+  refresh() {
+    this.loadMovies()
+  }
+
+  showRefresh() { this.isLoading = false }
+  hideRefresh() { this.isLoading = true }
+
   loadMovies() {
-    this.movieService.getMovies(this.pageNumber, this.pageSize).subscribe(response => {
-      this.movies = response.result;
-      this.pagination = response.pagination;
+    this.hideRefresh()
+    this.movieService.getMovies(this.pageNumber, this.pageSize).subscribe({
+      next: response =>
+      {
+        this.movies = response.result
+        this.pagination = response.pagination
+      },
+      error: err => this.showRefresh()
     })
   }
 
-  pageChanged(event: any) {
-    this.pageNumber = event.pageIndex + 1;
-    this.pageSize = event.pageSize;
-    this.loadMovies();
+  pageChanged(pageEvent: PageEvent) {
+    this.pageNumber = pageEvent.pageIndex + 1
+    this.pageSize = pageEvent.pageSize
+    this.loadMovies()
   }
+
 }

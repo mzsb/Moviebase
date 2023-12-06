@@ -13,4 +13,6 @@ public class ReviewDto
     public string Content { get; set; }
 
     public DateTime CreationDate { get; set; }
+
+    public DateTime LastUpdationDate { get; set; }
 }

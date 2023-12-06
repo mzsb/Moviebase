@@ -13,4 +13,7 @@ public class RegisterDto
 
     [DefaultValue("user")]
     public string Password { get; set; }
+
+    [DefaultValue("user@examp.le")]
+    public string Email { get; set; }
 }

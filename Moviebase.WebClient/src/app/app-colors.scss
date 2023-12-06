@@ -1,0 +1,105 @@
+
+$black: #000000;
+$white: #ffffff;
+$app-primary: #000000;
+$app-accent: #FFC107;
+$app-warn: #D32F2F;
+
+$app-brand-primary: (
+  50 : #e0e0e0,
+  100 : #b3b3b3,
+  200 : #808080,
+  300 : #4d4d4d,
+  400 : #262626,
+  500 : $app-primary,
+  600 : #000000,
+  700 : #000000,
+  800 : #000000,
+  900 : #000000,
+  A100 : #a6a6a6,
+  A200 : #8c8c8c,
+  A400 : #737373,
+  A700 : #666666,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$app-brand-accent: (
+    50: #fff8e1,
+    100: #ffecb5,
+    200: #ffe083,
+    300: #ffd451,
+    400: #ffca2c,
+    500: $app-accent,
+    600: #ffbb06,
+    700: #ffb305,
+    800: #ffab04,
+    900: #ff9e02,
+    A100 : #ffffff,
+    A200 : #fffaf2,
+    A400 : #ffe4bf,
+    A700 : #ffd9a6,
+  contrast: (
+    50: $black,
+    100: $black,
+    200: $black,
+    300: $black,
+    400: $black,
+    500: $black,
+    600: $black,
+    700: $black,
+    800: $black,
+    900: $black,
+    A100 : $black,
+    A200 : $black,
+    A400 : $black,
+    A700 : $black,
+  )
+);
+
+$app-brand-warn: (
+    50: #fae6e6,
+    100: #f2c1c1,
+    200: #e99797,
+    300: #e06d6d,
+    400: #da4e4e,
+    500: $app-warn,
+    600: #ce2a2a,
+    700: #c82323,
+    800: #c21d1d,
+    900: #b71212,
+    A100 : #ffe7e7,
+    A200 : #ffb4b4,
+    A400 : #ff8181,
+    A700 : #ff6868,
+  contrast: (
+    50: $black,
+    100: $black,
+    200: $black,
+    300: $black,
+    400: $white,
+    500: $white,
+    600: $white,
+    700: $white,
+    800: $white,
+    900: $white,
+    A100 : $black,
+    A200 : $black,
+    A400 : $black,
+    A700 : $black,
+  )
+);

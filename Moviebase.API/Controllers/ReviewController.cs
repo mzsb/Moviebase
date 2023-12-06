@@ -21,7 +21,7 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
     private const string _exampleMovieId = "35856fc5-f427-458f-a0a5-13a8ab381f33";
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ReviewDto>>> GetPagedreviewsOfMovieAsync(
+    public async Task<ActionResult<IEnumerable<ReviewDto>>> GetPagedReviewsOfMovieAsync(
         [FromQuery] PaginationParams paginationParams)
     {
         var reviews = await reviewService.GetPagedReviewsAsync(paginationParams);
@@ -36,11 +36,18 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
         [DefaultValue(typeof(Guid), _exampleMovieId)] Guid movieId,
         [FromQuery] PaginationParams paginationParams)
     {
-        var reviews = await reviewService.GetPagedReviewsOfMovieAsync(movieId, paginationParams);
+        try
+        {
+            var reviews = await reviewService.GetPagedReviewsOfMovieAsync(movieId, paginationParams);
 
-        Response.AddPaginationHeader(reviews.TotalCount);
+            Response.AddPaginationHeader(reviews.TotalCount);
 
-        return reviews;
+            return reviews;
+        }
+        catch (ReviewException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     //[Authorize(Policy = "RequireUserRole")]

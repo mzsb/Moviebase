@@ -322,6 +322,9 @@ namespace Moviebase.DAL.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("LastUpdationDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("MovieId")
                         .HasColumnType("TEXT");
 

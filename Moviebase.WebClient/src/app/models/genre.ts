@@ -1,6 +1,6 @@
-import { Guid } from "typescript-guid";
+import { Guid } from "typescript-guid"
 
 export type Genre = {
-    genreId: Guid;
-    name: string;
+    genreId: Guid
+    name: string
 }

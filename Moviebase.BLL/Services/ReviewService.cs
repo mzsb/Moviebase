@@ -25,13 +25,18 @@ public class ReviewService(MoviebaseDbContext context, IMapper mapper) : IReview
         .ProjectTo<ReviewDto>(mapper.ConfigurationProvider)
         .ToPagedListAsync(paginationParams);
 
-    public async Task<PagedList<ReviewDto>> GetPagedReviewsOfMovieAsync(Guid movieId, PaginationParams paginationParams) =>
-    await context.Reviews
-        .Where(review => review.MovieId == movieId)
-        .OrderBy(review => review.CreationDate)
-        .Include(review => review.User)
-        .ProjectTo<ReviewDto>(mapper.ConfigurationProvider)
-        .ToPagedListAsync(paginationParams);
+    public async Task<PagedList<ReviewDto>> GetPagedReviewsOfMovieAsync(Guid movieId, PaginationParams paginationParams)
+    {
+        if (!await context.Movies.AnyAsync(movie => movie.MovieId == movieId))
+            throw new ReviewException("Movie not exists");
+
+        return await context.Reviews
+            .Where(review => review.MovieId == movieId)
+            .OrderBy(review => review.CreationDate)
+            .Include(review => review.User)
+            .ProjectTo<ReviewDto>(mapper.ConfigurationProvider)
+            .ToPagedListAsync(paginationParams);
+    }
 
     public async Task<ReviewDto> CreateReviewAsync(CreateReviewDto createReviewDto)
     {
@@ -48,7 +53,8 @@ public class ReviewService(MoviebaseDbContext context, IMapper mapper) : IReview
             User = user,
             MovieId = createReviewDto.MovieId,
             Content = createReviewDto.Content,
-            CreationDate = DateTime.Now
+            CreationDate = DateTime.Now,
+            LastUpdationDate = DateTime.Now
         };
 
         await context.Reviews.AddAsync(newReview);
@@ -69,6 +75,7 @@ public class ReviewService(MoviebaseDbContext context, IMapper mapper) : IReview
                 ?? throw new ReviewException("Review not exists");
 
         review.Content = updateReviewDto.Content;
+        review.LastUpdationDate = DateTime.Now;
 
         var result = await context.SaveChangesAsync();
 

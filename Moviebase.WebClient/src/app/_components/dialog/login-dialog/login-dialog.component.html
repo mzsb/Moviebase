@@ -1,0 +1,53 @@
+<form
+  [formGroup]="loginForm"
+  (ngSubmit)="onSubmit()">
+
+  <div class="container">
+
+    <div class="row">
+
+      <mat-form-field color="primary">
+      <mat-label>Username</mat-label>
+      <input
+        type="text" 
+        matInput 
+        formControlName="username">
+      </mat-form-field>
+
+    </div>
+
+    <div class="row">
+
+      <mat-form-field >
+        <mat-label>Password</mat-label>
+        <input
+          type="password" 
+          matInput 
+          formControlName="password">
+      </mat-form-field>
+
+    </div>
+
+    <div class="row">
+
+      <button
+        mat-raised-button 
+        type="submit" 
+        color="accent">
+        Sign in
+      </button>
+    </div>
+
+    <div class="sign-up row">
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="openRegistrationDialog()"
+        color="accent">
+        I'm new
+      </button>
+    </div>  
+
+  </div>
+
+</form>

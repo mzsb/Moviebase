@@ -5,6 +5,7 @@ using Moviebase.BLL.Dtos;
 using Moviebase.BLL.Exceptions;
 using Moviebase.BLL.Interfaces;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Authorization;
 
 #endregion
 

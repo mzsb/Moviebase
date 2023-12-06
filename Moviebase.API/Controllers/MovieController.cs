@@ -1,5 +1,6 @@
 ﻿#region Usings
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moviebase.API.Extensions;
 using Moviebase.BLL.Dtos;

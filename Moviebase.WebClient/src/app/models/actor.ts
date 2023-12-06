@@ -1,6 +1,6 @@
-import { Guid } from "typescript-guid";
+import { Guid } from "typescript-guid"
 
 export type Actor = {
-    actorId: Guid;
-    name: string;
+    actorId: Guid
+    name: string
 }

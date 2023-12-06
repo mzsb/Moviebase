@@ -44,7 +44,12 @@ public class SeedService(
         await roleManager.CreateAsync(new Role { Name = _adminRole });
         await roleManager.CreateAsync(new Role { Name = _userRole });
 
-        var adminUser = new User { Id = _adminId, UserName = _adminName };
+        var adminUser = new User 
+        { 
+            Id = _adminId, 
+            UserName = _adminName,
+            Email = "admin@examp.le"
+        };
 
         await userManager.CreateAsync(adminUser, _adminPassword);
         await userManager.AddToRoleAsync(adminUser, _adminRole);
@@ -59,7 +64,9 @@ public class SeedService(
         {
             if (isFirst) { user.Id = _exampleUserId; isFirst = false; }
 
-            await userManager.CreateAsync(user, user.UserName ?? "Password");
+            user.Email = $"{user.UserName?.ToLower() ?? "email"}@examp.le";
+
+            await userManager.CreateAsync(user, user.UserName ?? "password");
             await userManager.AddToRoleAsync(user, _userRole);
         }
     }
@@ -92,7 +99,8 @@ public class SeedService(
     {
         var reviewFaker = new Faker<Review>()
             .RuleFor(user => user.Content, x => x.Lorem.Text())
-            .RuleFor(user => user.CreationDate, x => x.Date.Past(2));
+            .RuleFor(user => user.CreationDate, x => x.Date.Between(DateTime.Now.AddDays(-14), DateTime.Now.AddDays(-7)))
+            .RuleFor(user => user.LastUpdationDate, x => x.Date.Between(DateTime.Now.AddDays(-6), DateTime.Now.AddDays(-1)));
 
         var isFirst = true;
         foreach (var movie in await context.Movies.ToListAsync())

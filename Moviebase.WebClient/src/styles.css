@@ -1,18 +1,22 @@
-
-@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
-
 :root {
-    --main-bg-color: #DAD7DB;
-    --primary-text-color: #3F51B5;
-    --secondary-text-color: #777D8C;
+    --black: #000000;
+    --white: #ffffff;
+    --app-primary: #000000;
+    --app-light-primary: #262626;
+    --app-accent: #FFC107;
+    --app-warn: #D32F2F;
 }
 
 html {
-    background-color: var(--main-bg-color);
+    background-color: var(--app-light-primary);
 }
 
 .container-fluid {
-    background-color: var(--main-bg-color);
+    background-color: var(--app-light-primary);
+}
+
+.toast-container>div{
+    box-shadow: none !important;
 }
 
 

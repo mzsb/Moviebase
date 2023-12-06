@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moviebase.BLL.Dtos;
 using Moviebase.BLL.Exceptions;
+using Moviebase.BLL.Extensions;
 using Moviebase.BLL.Interfaces;
 using Moviebase.DAL.Model.Identity;
 
@@ -45,7 +46,14 @@ public class AccountService(
 
         if (string.IsNullOrEmpty(registerDto.Password)) throw new AccountException("Invalid password");
 
-        var user = new User { UserName = registerDto.Username };
+        if (string.IsNullOrEmpty(registerDto.Email) ||
+            !registerDto.Email.IsValidEmail()) throw new AccountException("Invalid email");
+
+        var user = new User 
+        { 
+            UserName = registerDto.Username,
+            Email = registerDto.Email
+        };
 
         try
         {

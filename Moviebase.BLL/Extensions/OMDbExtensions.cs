@@ -13,6 +13,9 @@ public static partial class OMDbExtensions
 {
     private static readonly Regex _posterUrlRegex = PosterUrlRegex();
 
+    [GeneratedRegex("https://m.media-amazon.com/images/M/.+._V1_SX300.jpg", RegexOptions.Compiled)]
+    private static partial Regex PosterUrlRegex();
+
     private static readonly NumberFormatInfo _numberFormatInfo = new(){ NumberDecimalSeparator = "." };
 
     public static Movie ToMovie(this OMDbDto movieData) => new()
@@ -32,7 +35,4 @@ public static partial class OMDbExtensions
         decimal.TryParse(str, _numberFormatInfo, out var @decimal) ?
             @decimal :
             -1;
-
-    [GeneratedRegex("https://m.media-amazon.com/images/M/.+._V1_SX300.jpg", RegexOptions.Compiled)]
-    private static partial Regex PosterUrlRegex();
 }

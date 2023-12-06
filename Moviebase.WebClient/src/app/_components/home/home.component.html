@@ -1,26 +1,50 @@
-<div class="container-fluid transparent">
+<div class="container-fluid">
 
-    <mat-grid-list class="movie-grid" cols="3" rowHeight="3:4">
+    <button 
+        id="refresh"
+        *ngIf="!isLoading" 
+        mat-fab 
+        color="accent"
+        (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+    </button>
+
+    <mat-grid-list 
+        *ngIf="movies && movies.length > 0"
+        class="movie-grid" cols="3" 
+        rowHeight="3:4">
         <mat-grid-tile *ngFor="let movie of movies">
-            <mat-card class="movie container">
+            <mat-card 
+                class="movie container-fluid"
+                [routerLink]="['/review', movie.movieId]">
                 <div class="detailes">
                     <p class="title">{{movie.title}}</p>
                     <p class="year">{{movie.year}}</p>
                     <p class="genre">{{movie.genres | map:'name' | join:', ' }}</p>
+                    <div *ngFor="let actor of movie.actors">
+                        <p class="actor">{{actor.name}}</p>
+                    </div>
                 </div>
-                <img class="poster" src="https://m.media-amazon.com/images/M/{{movie.posterId}}._V1_SX300.jpg">
+                <img
+                 *ngIf="movie.posterId"
+                 class="poster" 
+                 src="https://m.media-amazon.com/images/M/{{movie.posterId}}._V1_SX300.jpg">
+                <img
+                *ngIf="!movie.posterId"
+                 class="poster" 
+                 src="../../../assets/poster-placeholder.png">
             </mat-card>
         </mat-grid-tile>
     </mat-grid-list>
 
     <mat-paginator
         fixed
-        *ngIf="pagination"
+        *ngIf="movies && movies.length > 0 && pagination"
         hidePageSize="true"
         showFirstLastButtons
         [length]="pagination.totalCount"
         [pageSize]="pageSize"
         (page)="pageChanged($event)">
     </mat-paginator>
-    
+
 </div>

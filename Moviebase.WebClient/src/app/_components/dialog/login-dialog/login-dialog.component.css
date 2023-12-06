@@ -1,0 +1,14 @@
+
+::ng-deep .mat-mdc-dialog-surface {
+    background-color: transparent !important;
+}
+
+form {
+    background-color: var(--app-primary);
+    border-radius: 1.5em;
+    padding: 2em 1.5em 0.7em 1.5em;
+}
+
+.sign-up {
+    margin-top: 0.5em;
+}

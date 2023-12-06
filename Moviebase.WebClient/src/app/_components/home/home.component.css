@@ -2,6 +2,13 @@
     padding: 0;
 }
 
+#refresh {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .movie {
     position: relative;
     margin: 0;
@@ -22,16 +29,17 @@
 
 .detailes {
     position: absolute;
-    top: 25%;
+    top: 15%;
     left: 50%;
     width: 100%;
-    transform: translate(-50%, -25%);
+    transform: translate(-50%);
     z-index: 1;
 }
 
 .title {
+   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
    text-align: center;
-   font-size: 4vw;
+   font-size: 5vw;
    margin-bottom: 0;
 }
 
@@ -45,6 +53,13 @@
     text-align: center;
     font-size: 2vw;
     font-style: italic;
+    margin-bottom: 2vw;
+ }
+
+ .actor {
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 2.5vw;
     margin-bottom: 0;
  }
 
@@ -54,10 +69,13 @@
     position: fixed;
     bottom: 0;
     left: 50%;
-    transform: translate(-50%);
+    transform: translate(-50%, -10%);
     opacity: 0.5;
     transition: opacity 0.5s ease-in-out;
     z-index: 3;
+    background-color: var(--app-primary);
+    border-radius: 1.5em;
+    color: var(--app-accent);
 } 
 
 .mat-mdc-paginator:hover {
@@ -87,6 +105,10 @@
 
 ::ng-deep .mat-mdc-paginator-navigation-last {
     order: 5;
+}
+
+::ng-deep path { 
+    fill: var(--app-accent); 
 }
 
 

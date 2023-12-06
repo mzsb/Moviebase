@@ -1,19 +1,58 @@
-<ngx-spinner size="large" 
-             color="#DAD7DB"
-             type="ball-circus">           
+<ngx-spinner 
+  bdColor = "" 
+  size = "large" 
+  color = "#FFC107" 
+  type = "pacman" >
 </ngx-spinner>
 
 <mat-toolbar color="primary">
 
-  <a [routerLink]="['/']">
+  <mat-toolbar-row>
 
-    <img id="logo" src="../assets/logo.png" width="42px" height="42px"/>
-    
-  </a>
+    <a [routerLink]="['/']">
 
-  <h1>Moviebase</h1>
-  
-  <span class="menu-spacer"></span>
+      <object id="logo" data="../assets/logo.svg" width="42" height="42"></object>
+      
+    </a>
+
+    <a id="title" class="nav-item" [routerLink]="['/']">
+      Moviebase
+    </a>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button 
+      *ngIf="!(accountService.currentLogged$ | async)"
+      color="accent" 
+      (click)="openLoginDialog()">
+      Sign in
+    </button>
+
+ 
+      <mat-icon 
+        id="menu"
+        *ngIf="accountService.currentLogged$ | async"
+        [matMenuTriggerFor]="menu" 
+        color="accent">
+        menu
+      </mat-icon>
+
+    <mat-menu #menu="matMenu">
+
+      <button mat-menu-item
+        *ngIf="(accountService.currentLogged$ | async) | role: 'Admin'"
+        (click)="openAddMovieDialog()">
+        Add movie
+      </button>
+
+      <button mat-menu-item
+        (click)="logout()">
+        Sign out
+      </button>
+
+    </mat-menu>
+
+  </mat-toolbar-row>
 
 </mat-toolbar>
 
