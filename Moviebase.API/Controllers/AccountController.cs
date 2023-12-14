@@ -13,13 +13,15 @@ namespace Moviebase.API.Controllers;
 [Route("api/account")]
 public class AccountController(IAccountService accountService) : ControllerBase
 {
+    private readonly IAccountService _accountService = accountService;
+
     [HttpPost("login")]
     public async Task<ActionResult<LoggedDto>> LoginAsync(
         [FromBody] LoginDto loginDto)
     {
         try
         {
-            return await accountService.LoginAsync(loginDto);
+            return await _accountService.LoginAsync(loginDto);
         }
         catch (AccountException ex)
         {
@@ -33,7 +35,7 @@ public class AccountController(IAccountService accountService) : ControllerBase
     {
         try
         {
-            return await accountService.RegisterAsync(registerDto);
+            return await _accountService.RegisterAsync(registerDto);
         }
         catch (AccountException ex)
         {

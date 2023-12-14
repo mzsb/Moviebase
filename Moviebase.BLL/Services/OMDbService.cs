@@ -16,12 +16,14 @@ public class OMDbService(
     IConfiguration configuration, 
     HttpClient httpClient) : IOMDbService
 {
-    private readonly string _baseUrl = "https://www.omdbapi.com";
+    private const string _baseUrl = "https://www.omdbapi.com";
     private readonly string _apiKey = configuration.GetValue("OMDbAPIKey");
+
+    private readonly HttpClient _httpClient = httpClient;
 
     public async Task<OMDbDto> GetMovieDataByTitleAsync(string title)
     {
-        var resopnse = await httpClient.GetAsync($"{_baseUrl}/?t={title}&apikey={_apiKey}");
+        var resopnse = await _httpClient.GetAsync($"{_baseUrl}/?t={title}&apikey={_apiKey}");
 
         if (!resopnse.IsSuccessStatusCode) throw new OMDbException("Getting movie data failed");
 

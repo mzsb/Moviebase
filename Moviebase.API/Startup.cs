@@ -8,14 +8,16 @@ namespace Moviebase.API;
 
 public class Startup(IConfiguration configuration)
 {
+    private readonly IConfiguration _configuration = configuration;
+
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddApplicationServices(configuration);
+        services.AddApplicationServices(_configuration);
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddCors();
         services.AddSwaggerGen();
-        services.AddIdentityServices(configuration);
+        services.AddIdentityServices(_configuration);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

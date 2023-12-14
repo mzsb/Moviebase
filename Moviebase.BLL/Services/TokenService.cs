@@ -20,6 +20,8 @@ public class TokenService(
 {
     private readonly SymmetricSecurityKey _tokenKey = new (Encoding.UTF8.GetBytes(configuration.GetValue("TokenKey")));
 
+    private readonly UserManager<User> _userManager = userManager;
+
     public async Task<string> CreateTokenAsync(User user)
     {
         List<Claim> claims = [
@@ -27,7 +29,7 @@ public class TokenService(
             new (JwtRegisteredClaimNames.UniqueName, user.UserName)
         ];
 
-        var roles = await userManager.GetRolesAsync(user);
+        var roles = await _userManager.GetRolesAsync(user);
 
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 

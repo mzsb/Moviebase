@@ -13,14 +13,16 @@ namespace Moviebase.BLL.Services;
 
 public class GenreService(MoviebaseDbContext context) : IGenreService
 {
+    private readonly MoviebaseDbContext _context = context;
+
     public async Task<Genre?> GetGenreAsync(string rawGenre) =>
-        await context.Genres.SingleOrDefaultAsync(genre => genre.Name == rawGenre);
+        await _context.Genres.SingleOrDefaultAsync(genre => genre.Name == rawGenre);
     
     public async Task<Genre> CreateGenreAsync(string rawGenre) 
     {
         var newGenre = new Genre { Name = rawGenre };
-        await context.Genres.AddAsync(newGenre);
-        await context.SaveChangesAsync();
+        await _context.Genres.AddAsync(newGenre);
+        await _context.SaveChangesAsync();
         return newGenre;
     }
 

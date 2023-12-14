@@ -3,6 +3,7 @@
 using Moviebase.BLL.Helpers;
 
 #endregion
+
 namespace Moviebase.BLL.Extensions;
 
 public static class PaginationExtensions

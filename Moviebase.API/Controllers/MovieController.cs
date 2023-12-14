@@ -20,11 +20,13 @@ public class MovieController(
 {
     private const string _exampleMovieId = "35856fc5-f427-458f-a0a5-13a8ab381f33";
 
+    private readonly IMovieService _movieService = movieService;
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MovieDto>>> GetPagedMoviesAsync(
         [FromQuery] PaginationParams paginationParams)
     {
-        var movies = await movieService.GetPagedMoviesAsync(paginationParams);
+        var movies = await _movieService.GetPagedMoviesAsync(paginationParams);
 
         Response.AddPaginationHeader(movies.TotalCount);
 
@@ -37,7 +39,7 @@ public class MovieController(
     {
         try
         {
-            return await movieService.GetMovieByIdAsync(movieId);
+            return await _movieService.GetMovieByIdAsync(movieId);
         }
         catch(MovieException ex)
         {
@@ -47,7 +49,7 @@ public class MovieController(
 
     [HttpGet("title")]
     public async Task<ActionResult<IEnumerable<MovieTitleDto>>> GetMovieTitlesAsync() =>
-        await movieService.GetMovieTitlesAsync();
+        await _movieService.GetMovieTitlesAsync();
 
     //[Authorize(Policy = "RequireAdminRole")]
     [HttpPost]
@@ -56,7 +58,7 @@ public class MovieController(
     {
         try
         {
-            return await movieService.CreateMovieByTitleAsync(createMovieDto);
+            return await _movieService.CreateMovieByTitleAsync(createMovieDto);
         }
         catch (MovieException ex)
         {
@@ -71,7 +73,7 @@ public class MovieController(
     {
         try
         {
-            await movieService.DeleteMovieAsync(movieId);
+            await _movieService.DeleteMovieAsync(movieId);
             return Ok("Movie deletion success");
         }
         catch (MovieException ex)

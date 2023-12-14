@@ -1,5 +1,6 @@
 ﻿#region Usings
 
+using AutoMapper;
 using Bogus;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ namespace Moviebase.BLL.Services;
 public class SeedService(
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
-        IOMDbService omdbService,
+        IOMDbService oMDbService,
         IGenreService genreService,
         IActorService actorService,
         MoviebaseDbContext context) : ISeedService
@@ -25,12 +26,19 @@ public class SeedService(
     private readonly Guid _exampleUserId = Guid.Parse("e214ce42-f4f4-4859-ba1d-db6ab1f21f75");
     private readonly Guid _exampleMovieId = Guid.Parse("35856fc5-f427-458f-a0a5-13a8ab381f33");
     private readonly Guid _exampleReviewId = Guid.Parse("63d40f42-506a-4794-93f8-8378dfe5d600");
-    private readonly string _adminName = "admin";
-    private readonly string _adminPassword = "admin";
-    private readonly string _adminRole = "Admin";
-    private readonly string _userRole = "User";
-    private readonly int _userCount = 1;
-    private readonly int _reviwsPerUserForMovieCount = 1;
+    private const string _adminName = "admin";
+    private const string _adminPassword = "admin";
+    private const string _adminRole = "Admin";
+    private const string _userRole = "User";
+    private const int _userCount = 1;
+    private const int _reviwsPerUserForMovieCount = 1;
+
+    private readonly UserManager<User> _userManager = userManager;
+    private readonly RoleManager<Role> _roleManager = roleManager;
+    private readonly IOMDbService _oMDbService = oMDbService;
+    private readonly IGenreService _genreService = genreService;
+    private readonly IActorService _actorService = actorService;
+    private readonly MoviebaseDbContext _context = context;
 
     public async Task Seed()
     {
@@ -41,8 +49,8 @@ public class SeedService(
 
     private async Task SeedUsersAsync()
     {
-        await roleManager.CreateAsync(new Role { Name = _adminRole });
-        await roleManager.CreateAsync(new Role { Name = _userRole });
+        await _roleManager.CreateAsync(new Role { Name = _adminRole });
+        await _roleManager.CreateAsync(new Role { Name = _userRole });
 
         var adminUser = new User 
         { 
@@ -51,9 +59,9 @@ public class SeedService(
             Email = "admin@examp.le"
         };
 
-        await userManager.CreateAsync(adminUser, _adminPassword);
-        await userManager.AddToRoleAsync(adminUser, _adminRole);
-        await userManager.AddToRoleAsync(adminUser, _userRole);
+        await _userManager.CreateAsync(adminUser, _adminPassword);
+        await _userManager.AddToRoleAsync(adminUser, _adminRole);
+        await _userManager.AddToRoleAsync(adminUser, _userRole);
 
         var userFaker = new Faker<User>()
             .RuleFor(user => user.UserName, x => x.Name.FirstName())
@@ -66,33 +74,34 @@ public class SeedService(
 
             user.Email = $"{user.UserName?.ToLower() ?? "email"}@examp.le";
 
-            await userManager.CreateAsync(user, user.UserName ?? "password");
-            await userManager.AddToRoleAsync(user, _userRole);
+            await _userManager.CreateAsync(user, user.UserName ?? "password");
+            await _userManager.AddToRoleAsync(user, _userRole);
         }
     }
 
     private async Task SeedMoviesAsync()
     {
         var isFirst = true;
-        foreach (var movieData in omdbService.GetMovieDatasFromJSONFile("../Moviebase.DAL/movieSeed.json"))
+        foreach (var movieData in _oMDbService.GetMovieDatasFromJSONFile("../Moviebase.DAL/movieSeed.json"))
         {
             var newMovie = movieData.ToMovie();
 
             if (isFirst) { newMovie.MovieId = _exampleMovieId; isFirst = false; }
 
-            await context.AddAsync(newMovie);
+            await _context.AddAsync(newMovie);
 
-            await foreach (var genre in genreService.GetGenresAsync(movieData))
+            await foreach (var genre in _genreService.GetGenresAsync(movieData))
             {
-                await context.MovieGenres.AddAsync(new() { Movie = newMovie, Genre = genre });
+                await _context.MovieGenres.AddAsync(new() { Movie = newMovie, Genre = genre });
             }
 
-            await foreach (var actor in actorService.GetActorsAsync(movieData))
+            await foreach (var actor in _actorService.GetActorsAsync(movieData))
             {
-                await context.MovieActors.AddAsync(new() { Movie = newMovie, Actor = actor });
+                await _context.MovieActors.AddAsync(new() { Movie = newMovie, Actor = actor });
             }
         }
-        await context.SaveChangesAsync();
+
+        await _context.SaveChangesAsync();
     }
 
     private async Task SeedReviewsAsync()
@@ -103,9 +112,9 @@ public class SeedService(
             .RuleFor(user => user.LastUpdationDate, x => x.Date.Between(DateTime.Now.AddDays(-6), DateTime.Now.AddDays(-1)));
 
         var isFirst = true;
-        foreach (var movie in await context.Movies.ToListAsync())
+        foreach (var movie in await _context.Movies.ToListAsync())
         {
-            foreach (var user in await userManager.Users.ToListAsync())
+            foreach (var user in await _userManager.Users.ToListAsync())
             {
                 foreach (var review in reviewFaker.GenerateLazy(_reviwsPerUserForMovieCount))
                 {
@@ -114,11 +123,11 @@ public class SeedService(
                     review.User = user;
                     review.Movie = movie;
 
-                    await context.AddAsync(review);
+                    await _context.AddAsync(review);
                 }
             }
         }
 
-        await context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
     }
 }

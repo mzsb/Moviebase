@@ -19,13 +19,16 @@ public class UserService(
     UserManager<User> userManager,
     IMapper mapper) : IUserService
 {
+    private readonly UserManager<User> _userManager = userManager;
+    private readonly IMapper _mapper = mapper;
+
     public async Task<List<UserDto>> GetUsersAsync() =>
-        await userManager.Users
-            .ProjectTo<UserDto>(mapper.ConfigurationProvider)
+        await _userManager.Users
+            .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     public async Task DeleteUserAsync(Guid userId)
     {
-        if (await userManager.Users
+        if (await _userManager.Users
         .Where(user => user.Id == userId)
         .ExecuteDeleteAsync() < 1)
             throw new UserException("User deletion failed");

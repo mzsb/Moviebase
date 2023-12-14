@@ -13,14 +13,16 @@ namespace Moviebase.BLL.Services;
 
 public class ActorService(MoviebaseDbContext context) : IActorService
 {
+    private readonly MoviebaseDbContext _context = context;
+
     public async Task<Actor?> GetActorAsync(string rawActor) =>
-        await context.Actors.SingleOrDefaultAsync(actor => actor.Name == rawActor);
+        await _context.Actors.SingleOrDefaultAsync(actor => actor.Name == rawActor);
 
     public async Task<Actor> CreateActorAsync(string rawActor)
     {
         var newActor = new Actor { Name = rawActor };
-        await context.Actors.AddAsync(newActor);
-        await context.SaveChangesAsync();
+        await _context.Actors.AddAsync(newActor);
+        await _context.SaveChangesAsync();
         return newActor;
     }
 

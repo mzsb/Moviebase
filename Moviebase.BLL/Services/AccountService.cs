@@ -19,24 +19,29 @@ public class AccountService(
     ITokenService tokenService,
     IMapper mapper) : IAccountService
 {
+    private readonly UserManager<User> _userManager = userManager;
+    private readonly SignInManager<User> _signInManager = signInManager;
+    private readonly ITokenService _tokenService = tokenService;
+    private readonly IMapper _mapper = mapper;
+
     public async Task<LoggedDto> LoginAsync(LoginDto loginDto)
     {
         if (string.IsNullOrEmpty(loginDto.Username)) throw new AccountException("Invalid username");
 
         if (string.IsNullOrEmpty(loginDto.Password)) throw new AccountException("Invalid password");
 
-        var user = await userManager.Users.SingleOrDefaultAsync(user => user.UserName == loginDto.Username) 
+        var user = await _userManager.Users.SingleOrDefaultAsync(user => user.UserName == loginDto.Username) 
             ?? throw new AccountException("Invalid username");
 
-        var result = await signInManager
+        var result = await _signInManager
             .CheckPasswordSignInAsync(user, loginDto.Password, false);
 
         if (!result.Succeeded) throw new AccountException("Invalid password");
 
         return new LoggedDto
         {
-            User = mapper.Map<UserDto>(user),
-            Token = await tokenService.CreateTokenAsync(user)
+            User = _mapper.Map<UserDto>(user),
+            Token = await _tokenService.CreateTokenAsync(user)
         };
     }
 
@@ -57,8 +62,8 @@ public class AccountService(
 
         try
         {
-            await userManager.CreateAsync(user, registerDto.Password);
-            await userManager.AddToRoleAsync(user, "User");
+            await _userManager.CreateAsync(user, registerDto.Password);
+            await _userManager.AddToRoleAsync(user, "User");
         }
         catch (InvalidOperationException) { throw new AccountException("Registration failed"); }
 

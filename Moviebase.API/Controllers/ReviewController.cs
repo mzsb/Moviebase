@@ -20,11 +20,13 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
     private const string _exampleReviewId = "63d40f42-506a-4794-93f8-8378dfe5d600";
     private const string _exampleMovieId = "35856fc5-f427-458f-a0a5-13a8ab381f33";
 
+    private readonly IReviewService _reviewService = reviewService;
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ReviewDto>>> GetPagedReviewsOfMovieAsync(
         [FromQuery] PaginationParams paginationParams)
     {
-        var reviews = await reviewService.GetPagedReviewsAsync(paginationParams);
+        var reviews = await _reviewService.GetPagedReviewsAsync(paginationParams);
 
         Response.AddPaginationHeader(reviews.TotalCount);
 
@@ -38,7 +40,7 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
     {
         try
         {
-            var reviews = await reviewService.GetPagedReviewsOfMovieAsync(movieId, paginationParams);
+            var reviews = await _reviewService.GetPagedReviewsOfMovieAsync(movieId, paginationParams);
 
             Response.AddPaginationHeader(reviews.TotalCount);
 
@@ -57,7 +59,7 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
     {
         try
         {
-            return await reviewService.CreateReviewAsync(createReviewDto);
+            return await _reviewService.CreateReviewAsync(createReviewDto);
         } catch(ReviewException ex)
         {
             return BadRequest(ex.Message);
@@ -72,7 +74,7 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
     {
         try
         {
-            return await reviewService.UpdateReviewAsync(reviewId, updateReviewDto);
+            return await _reviewService.UpdateReviewAsync(reviewId, updateReviewDto);
         }
         catch (ReviewException ex)
         {
@@ -87,7 +89,7 @@ public class ReviewController(IReviewService reviewService) : ControllerBase
     {
         try
         {
-            await reviewService.DeleteReviewAsync(reviewId);
+            await _reviewService.DeleteReviewAsync(reviewId);
             return Ok("Review deletion success");
         }
         catch (ReviewException ex)
